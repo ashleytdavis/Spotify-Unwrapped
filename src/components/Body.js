@@ -6,11 +6,11 @@ const Body = () => {
         <div id="body">
             <Row>
                 <Col sm={8} md={8} lg={8}>
-                    <h3>Login</h3>
+                    <Button>Log into Spotify</Button>
                 </Col>
             </Row>
         </div>
     )
 }
 
-export default Body
+export default Body;

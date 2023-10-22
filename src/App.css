@@ -1,3 +1,16 @@
+html {
+  background: grey;
+}
 div {
   text-align: center;
+}
+
+.container {
+  background-color: aqua;
+}
+
+* {
+  outline:auto;
+  color: red;
+  background-color: white;
 }
