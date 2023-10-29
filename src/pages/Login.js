@@ -1,12 +1,10 @@
 import { React, useState, useEffect } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-//import '../Spotify'
 import { Container, Row, Col, Button } from 'react-bootstrap'
 
 const CLIENT_ID = "58359343c27240ac9df7338477111e8d"
 const REDIRECT_URI = "http://localhost:3000/rewrapped"
-const CLIENT_SECRET = "889b29e34e154cd9956319a52f8dcd4f"
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
 const RESPONSE_TYPE = "token"
 const SPACE = "%20"
