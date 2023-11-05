@@ -2,6 +2,7 @@ import { React, useState, useEffect } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { Container, Row, Col, Button } from 'react-bootstrap'
+import SpotifyGetPlaylists from './SpotifyGetPlaylists'
 
 const CLIENT_ID = "58359343c27240ac9df7338477111e8d"
 const REDIRECT_URI = "http://localhost:3000/rewrapped"
@@ -29,19 +30,19 @@ const Login = () => {
     useEffect(() => {
         if(window.location.hash) {
            const {access_token, expires_in, token_type,} = getReturnedParamsFromSpotify(window.location.hash);
-
-           localStorage.clear()
+           localStorage.clear();
+           localStorage.removeItem("accessToken");
            localStorage.setItem("accessToken", access_token);
            localStorage.setItem("tokenType", token_type);
            localStorage.setItem("expiresIn", expires_in);
            
+           
         }
     })
-    //const [logged, setLogged] = useState(false) // Has the user logged in?
-    //const [inputfields, setInputFields] = useState(false);
-    
+
     const handleLogin = () => {
         window.location = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPES_URL}&response_type=token&show_dialog=true`;
+        setLoggedIn(true)
     };
 
 
@@ -51,7 +52,8 @@ const Login = () => {
             <Container>
                 <Row>
                     <Col sm={8} md={8} lg={8}>
-                        <button onClick = {handleLogin}>Log into Spotify</button>
+                        <button onClick = {handleLogin}>Log into Spotify</button> {
+                        }
                     </Col>
                 </Row>
             </Container>

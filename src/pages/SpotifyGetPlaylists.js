@@ -5,6 +5,7 @@ const PLAYLISTS_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
 
 
 const SpotifyGetPlaylists = () => {
+    //console.log(localStorage.getItem("accessToken"))
   const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"));
   const [playlistNames, setPlaylistNames] = useState([]);
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -19,6 +20,7 @@ const SpotifyGetPlaylists = () => {
       });
 
       if (response.ok) {
+        localStorage.clear();
         const data = await response.json();
         const names = data.items.map(playlist => playlist.name);
         setPlaylistNames(names); 
