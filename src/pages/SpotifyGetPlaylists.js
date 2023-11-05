@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import "../components/AlbumCard.js"
 import { Container, Row, Col, Button } from 'react-bootstrap';
+import AlbumCard from "../components/AlbumCard.js";
 
 const PLAYLISTS_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
 
 
 const SpotifyGetPlaylists = () => {
-    //console.log(localStorage.getItem("accessToken"))
   const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"));
   const [playlistNames, setPlaylistNames] = useState([]);
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -22,8 +23,8 @@ const SpotifyGetPlaylists = () => {
       if (response.ok) {
         localStorage.clear();
         const data = await response.json();
-        const names = data.items.map(playlist => playlist.name);
-        setPlaylistNames(names); 
+        const names = data.items.map(playlist => [playlist.name, playlist.images[0].url, playlist.id]);
+        setPlaylistNames(names);
         setButtonClicked(true);
       } else {
         if (response.status === 401) {
@@ -42,15 +43,21 @@ const SpotifyGetPlaylists = () => {
         <Row>
           <Col sm={8} md={8} lg={8}>
             <Button onClick={handleButtonClick}>Get Playlist Names</Button>
-            {buttonClicked && (
-              <div>
-                <h2>Playlist Names</h2>
-                  {playlistNames.map((name, index) => (
-                    <li key={index}>{name}</li>
-                  ))}
-              </div>
-            )}
           </Col>
+        </Row>
+        {buttonClicked && (
+          <div>
+            <h2>Playlist Names</h2>
+          </div>
+        )}
+        <Row>
+          {buttonClicked &&
+            playlistNames.map((playlist, index) => (
+              <AlbumCard
+                key={index}
+                name={playlist[0]}
+                imageUrl={playlist[1]} />
+            ))}
         </Row>
       </Container>
     </div>

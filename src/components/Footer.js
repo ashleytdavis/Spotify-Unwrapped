@@ -5,9 +5,8 @@ const Footer = () => {
     return (
         <div id="footer">
              <Row>
-            
+                <a href="#">Back to top</a>
             </Row>
-            <h6>Back to top</h6>
         </div>
     )
 }

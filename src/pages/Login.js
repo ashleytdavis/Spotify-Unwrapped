@@ -1,8 +1,5 @@
-import { React, useState, useEffect } from 'react'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
-import { Container, Row, Col, Button } from 'react-bootstrap'
-import SpotifyGetPlaylists from './SpotifyGetPlaylists'
+import { React, useEffect } from 'react'
+import { Container, Row, Col } from 'react-bootstrap'
 
 const CLIENT_ID = "58359343c27240ac9df7338477111e8d"
 const REDIRECT_URI = "http://localhost:3000/rewrapped"
@@ -42,22 +39,18 @@ const Login = () => {
 
     const handleLogin = () => {
         window.location = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPES_URL}&response_type=token&show_dialog=true`;
-        setLoggedIn(true)
     };
 
 
     return (
         <div>
-            <Header />
             <Container>
                 <Row>
                     <Col sm={8} md={8} lg={8}>
-                        <button onClick = {handleLogin}>Log into Spotify</button> {
-                        }
+                        <button onClick = {handleLogin}>Log into Spotify</button>
                     </Col>
                 </Row>
             </Container>
-            <Footer />
         </div>
     )
 }
