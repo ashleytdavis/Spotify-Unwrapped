@@ -1,16 +1,79 @@
 html {
   background: grey;
 }
+
+.App {
+  background: linear-gradient(90deg, rgba(38,128,43,1) 0%, rgba(137,210,104,1) 20%, rgba(109,187,3,1) 50%, rgba(156,209,120,1) 80%, rgba(143,224,132,1) 100%);
+}
+
+
+
 div {
   text-align: center;
 }
 
-.container {
-  background-color: aqua;
+
+
+
+.album-box {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center !important;
+  align-items: center!important;
+  padding-top: 1rem !important;
+  border-radius: 25px !important;
+  background-color: white;
+  object-fit: contain !important;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
-* {
-  outline:auto;
-  color: red;
-  background-color: white;
+.album-box img {
+  max-width: 90%;
+  height: auto;
+}
+
+.album-box h5 {
+  padding: 1rem 0 0.5rem 0;
+  size: 2rem;
+}
+
+.row {
+  justify-content: center;
+  align-items: center;
+}
+
+#header h1 {
+  padding: 3rem 0;
+  font-size: 4rem !important;
+}
+
+#footer {
+  padding: 2.5rem 0;
+  background-color: grey;
+}
+
+#footer a {
+  color: white;
+  font-size: 1.5rem;
+}
+
+#login-button img {
+  max-width: 15%;
+}
+
+#login-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.grid {
+  border-radius: 25px !important;
+}
+
+#get-playlist-btn {
+  margin-bottom: 21rem;
 }

@@ -1,5 +1,7 @@
-import { React, useEffect } from 'react'
-import { Container, Row, Col } from 'react-bootstrap'
+import { React, useEffect, useState } from 'react'
+import { Container, Row, Col, Button } from 'react-bootstrap'
+import spotify from '../assets/spotify_icon.png';
+import SpotifyGetPlaylists from '../pages/SpotifyGetPlaylists';
 
 const CLIENT_ID = "58359343c27240ac9df7338477111e8d"
 const REDIRECT_URI = "http://localhost:3000/rewrapped"
@@ -24,16 +26,15 @@ const getReturnedParamsFromSpotify = (hash) => {
 };
 
 const Login = () => {
+    
     useEffect(() => {
-        if(window.location.hash) {
-           const {access_token, expires_in, token_type,} = getReturnedParamsFromSpotify(window.location.hash);
-           localStorage.clear();
-           localStorage.removeItem("accessToken");
-           localStorage.setItem("accessToken", access_token);
-           localStorage.setItem("tokenType", token_type);
-           localStorage.setItem("expiresIn", expires_in);
-           
-           
+        if (window.location.hash) {
+            const { access_token, expires_in, token_type, } = getReturnedParamsFromSpotify(window.location.hash);
+            localStorage.clear();
+            localStorage.removeItem("accessToken");
+            localStorage.setItem("accessToken", access_token);
+            localStorage.setItem("tokenType", token_type);
+            localStorage.setItem("expiresIn", expires_in);
         }
     })
 
@@ -46,8 +47,11 @@ const Login = () => {
         <div>
             <Container>
                 <Row>
-                    <Col sm={8} md={8} lg={8}>
-                        <button onClick = {handleLogin}>Log into Spotify</button>
+                    <Col sm={4} md={4} lg={3}>
+                        <Button variant="dark" size="lg" onClick={handleLogin} id='login-button'>
+                                Log into Spotify
+                                <img src={spotify} />
+                            </Button>
                     </Col>
                 </Row>
             </Container>

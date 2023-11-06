@@ -42,15 +42,14 @@ const SpotifyGetPlaylists = () => {
       <Container>
         <Row>
           <Col sm={8} md={8} lg={8}>
-            <Button onClick={handleButtonClick}>Get Playlist Names</Button>
+            {buttonClicked ? (
+              null // This will make the button disappear
+            ) : (
+              <Button id='get-playlist-btn' variant='success' onClick={handleButtonClick}>Get Playlist Names</Button>
+            )}
           </Col>
         </Row>
-        {buttonClicked && (
-          <div>
-            <h2>Playlist Names</h2>
-          </div>
-        )}
-        <Row>
+        <Row className="grid">
           {buttonClicked &&
             playlistNames.map((playlist, index) => (
               <AlbumCard

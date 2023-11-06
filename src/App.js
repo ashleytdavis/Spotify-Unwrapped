@@ -1,5 +1,5 @@
 import './App.css';
-import GetPlaylist from './pages/SpotifyGetPlaylists';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from '../src/components/Header.js'
 import Footer from '../src/components/Footer.js'
 import Login from './pages/Login'
