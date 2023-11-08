@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../components/AlbumCard.js"
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, Form, FormControl } from 'react-bootstrap';
 import AlbumCard from "../components/AlbumCard.js";
 
 const PLAYLISTS_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
@@ -10,6 +10,7 @@ const SpotifyGetPlaylists = () => {
   const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"));
   const [playlistNames, setPlaylistNames] = useState([]);
   const [buttonClicked, setButtonClicked] = useState(false);
+  const [selectedAlbumId, setSelectedAlbumId] = useState('');
 
   const handleButtonClick = async () => {
     try {
@@ -37,29 +38,47 @@ const SpotifyGetPlaylists = () => {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Selected album id:', selectedAlbumId);
+  }
+
+
   return (
-    <div>
-      <Container>
-        <Row>
-          <Col sm={8} md={8} lg={8}>
-            {buttonClicked ? (
-              null // This will make the button disappear
-            ) : (
-              <Button id='get-playlist-btn' variant='success' onClick={handleButtonClick}>Get Playlist Names</Button>
-            )}
-          </Col>
-        </Row>
-        <Row className="grid">
-          {buttonClicked &&
-            playlistNames.map((playlist, index) => (
-              <AlbumCard
-                key={index}
-                name={playlist[0]}
-                imageUrl={playlist[1]} />
-            ))}
-        </Row>
-      </Container>
-    </div>
+    <Container>
+      <Row>
+        <Col sm={8} md={8} lg={8}>
+          {buttonClicked ? (
+            null // This will make the button disappear
+          ) : (
+            <Button id='get-playlist-btn' variant='success' onClick={handleButtonClick}>Get Playlist Names</Button>
+          )}
+        </Col>
+      </Row>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="playlistSelect">
+          <Form.Label>Select a playlist</Form.Label>
+          <Row className="grid">
+            {buttonClicked &&
+              playlistNames.map((playlist, index) => (
+                <Col sm={6} md={4} lg={4}>
+                  <Form.Check onChange={(e) => setSelectedAlbumId(e.target.value)}>
+                    <AlbumCard
+                      name={playlist[0]}
+                      imageUrl={playlist[1]}
+                      unique_index={index}
+                      id={playlist[2]}
+                      onClick={setSelectedAlbumId} />
+                  </Form.Check>
+                </Col>
+              ))}
+          </Row>
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Submit
+        </Button>
+      </Form>
+    </Container>
   );
 };
 
