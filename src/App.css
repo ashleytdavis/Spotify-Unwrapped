@@ -77,3 +77,9 @@ div {
 #get-playlist-btn {
   margin-bottom: 21rem;
 }
+
+.carousel-item-next, .carousel-item-prev, .carousel-item.active {
+  padding:  0 0 3rem 0;
+  display: flex !important;
+  justify-content: center !important;
+}

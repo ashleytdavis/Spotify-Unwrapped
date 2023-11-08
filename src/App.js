@@ -1,7 +1,6 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from '../src/components/Header.js'
-import Footer from '../src/components/Footer.js'
 import Login from './pages/Login'
 import SpotifyGetPlaylists from './pages/SpotifyGetPlaylists';
 
@@ -16,7 +15,6 @@ function App() {
       <br />
       <SpotifyGetPlaylists />
       <br />
-      <Footer />
     </div>
   );
 }

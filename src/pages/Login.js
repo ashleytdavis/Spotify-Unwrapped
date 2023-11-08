@@ -38,7 +38,8 @@ const Login = () => {
         }
     })
 
-    const handleLogin = () => {
+    const handleLogin = (e) => {
+        e.preventDefault();
         window.location = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPES_URL}&response_type=token&show_dialog=true`;
     };
 

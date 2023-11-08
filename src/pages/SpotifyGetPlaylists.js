@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../components/AlbumCard.js"
-import { Container, Row, Col, Button, Form, FormControl } from 'react-bootstrap';
+import { Container, Row, Col, Button, Form, FormControl, Carousel } from 'react-bootstrap';
 import AlbumCard from "../components/AlbumCard.js";
 
 const PLAYLISTS_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
@@ -43,6 +43,10 @@ const SpotifyGetPlaylists = () => {
     console.log('Selected album id:', selectedAlbumId);
   }
 
+  const handleSelect = selectedIndex => {
+    setSelectedAlbumId(playlistNames[selectedIndex][2]);
+  }
+
 
   return (
     <Container>
@@ -58,24 +62,24 @@ const SpotifyGetPlaylists = () => {
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="playlistSelect">
           <Form.Label>Select a playlist</Form.Label>
-          <Row className="grid">
+          <Carousel onSelect={handleSelect}>
             {buttonClicked &&
               playlistNames.map((playlist, index) => (
-                <Col sm={6} md={4} lg={4}>
-                  <Form.Check onChange={(e) => setSelectedAlbumId(e.target.value)}>
+                <Carousel.Item>
+                  <Col sm={6} md={4} lg={4}>
                     <AlbumCard
                       name={playlist[0]}
                       imageUrl={playlist[1]}
                       unique_index={index}
                       id={playlist[2]}
-                      onClick={setSelectedAlbumId} />
-                  </Form.Check>
-                </Col>
+                    />
+                  </Col>
+                </Carousel.Item>
               ))}
-          </Row>
+          </Carousel>
         </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
+        <Button variant="success" type="submit">
+          Begin
         </Button>
       </Form>
     </Container>
