@@ -44,7 +44,12 @@ const SpotifyGetPlaylists = () => {
   }
 
   const handleSelect = selectedIndex => {
-    setSelectedAlbumId(playlistNames[selectedIndex][2]);
+    // Check if playlistNames is not empty and the selected index is valid
+    if (playlistNames.length > 0 && selectedIndex >= 0 && selectedIndex < playlistNames.length) {
+      setSelectedAlbumId(playlistNames[selectedIndex][2]);
+    } else {
+      console.error('Invalid selectedIndex or playlistNames array is empty.');
+    }
   }
 
 
