@@ -11,6 +11,8 @@ const SpotifyGetPlaylists = () => {
   const [playlistNames, setPlaylistNames] = useState([]);
   const [buttonClicked, setButtonClicked] = useState(false);
   const [selectedAlbumId, setSelectedAlbumId] = useState('');
+  const [playlistTracks, setPlaylistTracks] = useState([]);
+
 
   const handleButtonClick = async () => {
     try {
@@ -38,10 +40,41 @@ const SpotifyGetPlaylists = () => {
     }
   };
 
+  const handleFetchTracks = async () => {
+    try {
+      const response = await fetch(`https://api.spotify.com/v1/playlists/${selectedAlbumId}/tracks`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const tracks = data.items.map(item => ({
+          name: item.track.name,
+          artwork: item.track.album.images[0].url,
+        }));
+        
+        console.log('Playlist Tracks:', tracks);
+        
+        setPlaylistTracks(tracks);
+      } else {
+        console.error('Error fetching playlist tracks');
+      }
+    } catch (error) {
+      console.error('Error fetching playlist tracks:', error);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Selected album id:', selectedAlbumId);
-  }
+    if (selectedAlbumId) {
+      handleFetchTracks();
+    } else {
+      console.error('No playlist selected');
+    }
+  };
 
   const handleSelect = selectedIndex => {
     // Check if playlistNames is not empty and the selected index is valid
@@ -87,6 +120,19 @@ const SpotifyGetPlaylists = () => {
           Begin
         </Button>
       </Form>
+
+      {/* Display fetched playlist tracks */}
+      <div>
+        <h3>Playlist Tracks</h3>
+        <div className="tracklist">
+          {playlistTracks.map((track, index) => (
+            <div key={index} className="track">
+              
+            </div>
+          ))}
+        </div>
+      </div>
+      
     </Container>
   );
 };
