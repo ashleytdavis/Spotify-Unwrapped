@@ -1,15 +1,15 @@
 import { Row, Col } from 'react-bootstrap'
-import { React, useState } from 'react'
+import { React } from 'react'
+import spotify from '../assets/spotify_unwrapped.png'
 
 const Header = () => {
 
-  const [title, setTitle] = useState('Spotify Unwind');
 
   return (
     <div id="header">
       <Row>
         <Col sm={12} md={12} lg={12}>
-          <h1>{title}</h1>
+          <img src={spotify} alt="website title"/> 
         </Col>
       </Row>
     </div>
