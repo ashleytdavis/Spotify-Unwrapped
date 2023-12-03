@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../components/AlbumCard.js"
-import { Container, Row, Col, Button, Form, Carousel } from 'react-bootstrap';
+import { Container, Row, Col, Button, Form, Carousel, Modal } from 'react-bootstrap';
 import AlbumCard from "../components/AlbumCard.js";
 import SongCard from "../components/SongCard.js";
 import spotify from '../assets/spotify_icon.png';
@@ -44,7 +44,23 @@ const SpotifyGetPlaylists = () => {
   const [guessedSongs, setGuessedSongs] = useState({ songName: false });
   const [inputValue, setInputValue] = useState('')
   const [showWinText, setShowWinText] = useState(false);
+  const [count, setCount] = useState(0);
+  const [show, setShow] = useState(false);
+  // New state variable to track whether the user has won
+  const [hasWon, setHasWon] = useState(false);
 
+  const handleClose = () => { setShow(false) };
+  const handleReplay = () => {
+    //window.location.reload();
+    setButtonClicked(false);
+    setCount(0);
+    setShow(false);
+    setGameBegin(false);
+    handleButtonClick();
+    setHasWon(false);
+    setGuessedSongs({});
+    handleButtonClick();
+  }
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -52,8 +68,11 @@ const SpotifyGetPlaylists = () => {
 
   const handleSongGuess = (songName) => {
     const updatedGuessedSongs = { ...guessedSongs, [songName]: true };
+
     setGuessedSongs(updatedGuessedSongs);
     setInputValue('');
+
+
   };
 
   const handleSubmitGuess = (e) => {
@@ -62,24 +81,24 @@ const SpotifyGetPlaylists = () => {
     const selectedSong = playlistTracks.find((track) => track.name === inputValue);
     if (selectedSong) {
       handleSongGuess(selectedSong.name);
+    } else {
+      // Increment count for incorrect guesses
+      setCount(count + 1);
+
+      // Check if the game is over
+      if (count + 1 === 3) {
+        // Handle game over logic here
+        setShow(true);
+      }
     }
 
+    // Check if all songs are guessed correctly and handle accordingly
     if (Object.values(guessedSongs).every((guessed) => guessed)) {
-      setShowWinText(true);
+      setHasWon(true);
     }
+
+    setInputValue('');
   };
-
-  /*
-  useEffect(() => {
-    // Check if all songs have been guessed
-    if (Object.values(guessedSongs).every((guessed) => guessed)) {
-      setShowWinText(true);
-    }
-  }, [guessedSongs]);
-*/
-
-
-
 
   const handleButtonClick = async () => {
     try {
@@ -98,6 +117,8 @@ const SpotifyGetPlaylists = () => {
         setButtonClicked(true);
         setGuessedSongs({}); // Reset guessedSongs when selecting a new playlist
         setShowWinText(false);
+        setHasWon(false);
+        setCount(0);
       } else {
         if (response.status === 401) {
           // Handle unauthorized access
@@ -122,6 +143,7 @@ const SpotifyGetPlaylists = () => {
         const data = await response.json();
         const tracks = data.items.map(item => ({
           name: item.track.name,
+          artist: item.track.artists[0].name,
           artwork: item.track.album.images[0].url,
         }));
 
@@ -165,7 +187,24 @@ const SpotifyGetPlaylists = () => {
       localStorage.setItem("tokenType", token_type);
       localStorage.setItem("expiresIn", expires_in);
     }
-  })
+  }, [])
+
+  const handleWin = () => {
+    console.log('You win!');
+    setHasWon(true);
+    // You can add further actions here if needed
+  };
+
+  useEffect(() => {
+    // Check if all songs are guessed correctly
+    if (gamebegin && Object.values(guessedSongs).every((guessed) => guessed)) {
+      // Check if the user has not already won
+      if (!hasWon) {
+        handleWin();
+      }
+    }
+  }, [guessedSongs, gamebegin, hasWon]);
+
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -177,29 +216,21 @@ const SpotifyGetPlaylists = () => {
 
       {/* Initial Screen that Appears when Loading In! */}
       {!buttonClicked ? (
-        <Row>
-          <Col sm={12} md={6} lg={6} id="login-area">
-            <Row>
-              <Col sm={4} md={4} lg={3}>
-                <Button variant="dark" size="lg" onClick={handleLogin} id='login-button'>
-                  Log into Spotify
-                  <img src={spotify} alt="spotify logo" />
-                </Button>
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={4} md={4} lg={3}>
-                <Button id='get-playlist-btn' variant='success' onClick={handleButtonClick}>Begin</Button>
-              </Col>
-            </Row>
-          </Col>
-          <Col sm={12} md={6} lg={6} id="rule-area">
-            <h5>How to Play:</h5>
-            <ol>
-              <li>Select a playlist</li>
-            </ol>
-          </Col>
-        </Row>) : (null)
+
+        <div id="login-area">
+
+          <Button variant="dark" size="lg" onClick={handleLogin} id='login-button'>
+            Log into Spotify
+            <img src={spotify} alt="spotify logo" />
+          </Button>
+
+          <Button id='get-playlist-btn' variant='success' size="md" onClick={handleButtonClick}>
+            Begin
+          </Button>
+
+
+        </div>)
+        : (null)
       }
 
 
@@ -242,6 +273,7 @@ const SpotifyGetPlaylists = () => {
                   <SongCard
                     name={track.name}
                     imageUrl={track.artwork}
+                    artist={track.artist}
                     id={track.name}
                   />
                 </div>
@@ -255,22 +287,61 @@ const SpotifyGetPlaylists = () => {
                 type="text"
                 placeholder="Type the song name"
                 value={inputValue}
+                name="guess"
                 onChange={handleInputChange}
+                required
               />
-              <Button variant="primary" type="submit">
+              <Button variant="success" type="submit">
                 Submit
               </Button>
+
+
+              {gamebegin && count > 0 && count < 3 && (
+                <div className="strike-indicator">
+                  {Array.from({ length: count }, (_, index) => (
+                    <span key={index} className="strike">X </span>
+                  ))}
+                </div>
+              )}
             </Form>
           </div>
         </div>
       ) : (null)
       }
 
-      {showWinText && (
-        <div className="win-text">
-          <p>Congratulations! You've guessed all the songs! 🎉</p>
-        </div>
-      )}
+
+
+      {
+        show && (
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header>
+              <Modal.Title>You Lose!</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Better luck next time!</Modal.Body>
+            <Modal.Footer>
+              <Button variant="success" onClick={handleReplay}>
+                Play Again
+              </Button>
+            </Modal.Footer>
+          </Modal>)
+      }
+
+
+      {
+        count < 3 && hasWon && Object.values(guessedSongs).length === playlistTracks.length && (
+          <Modal show={hasWon} onHide={handleClose}>
+            <Modal.Header>
+              <Modal.Title>You Win!</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Congratulations! You know your music well!</Modal.Body>
+            <Modal.Footer>
+              <Button variant="success" onClick={handleReplay}>
+                Play Again
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )
+      }
 
 
 

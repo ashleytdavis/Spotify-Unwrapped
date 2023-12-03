@@ -16,15 +16,8 @@ def fetch_tracks():
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
     results = sp.playlist_tracks(playlist_id)
-    tracks = []
-
-    for item in results['items']:
-        track_info = {
-            'name': item['track']['name']
-        }
-        tracks.append(track_info)
-
-    return jsonify({'tracks': tracks})
+    
+    return jsonify({'tracks': results})
 
 
 if __name__ == '__main__':
