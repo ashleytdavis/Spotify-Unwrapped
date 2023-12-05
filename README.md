@@ -10,4 +10,4 @@ playlists!
 This project was developed as a part of the Oasis Project Series. Members of the Project Series attend weekly hack and information sessions and develop a semester-long full-stack project.
 
 
-![Static Badge](https://img.shields.io/badge/check%20out%20oasis!-72d498?link=https://oasisneu.com/)
+![Static Badge](https://img.shields.io/badge/check%20out%20oasis!-72d498&link=https://oasisneu.com/)
